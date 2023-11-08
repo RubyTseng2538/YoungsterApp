@@ -10,15 +10,15 @@ export default function Footer(){
   let navigate = useNavigate();
     return (
         <footer className="footer">
-          <button class="button-solid" onClick={() => {
+          <button className="button-solid" onClick={() => {
             if(window.history.state && window.history.state.idx > 0){
               return navigate(-1)
             }else {
               navigate('/', { replace: true });
             }}
-          }><LeftOutline fontSize={24} /></button>
-          <Link to="/" style={{ color: 'black', textDecoration: 'none' }}><FolderOutline style={{marginRight: '30%'}}/></Link>
-          <Link to="/login" style={{ color: 'black', textDecoration: 'none' }}><UserCircleOutline style={{margineLeft: '30%'}}/></Link>
+          }><LeftOutline fontSize={24} style={{marginRight: '30%'}}/></button>
+          <Link to="/" style={{ color: 'black', textDecoration: 'none' }}><FolderOutline /></Link>
+          <Link to="/login" style={{ color: 'black', textDecoration: 'none' }}><UserCircleOutline style={{marginLeft: '30%'}}/></Link>
         </footer>
     );
 }

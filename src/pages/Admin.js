@@ -5,8 +5,8 @@ import {
     EditSOutline,
   } from 'antd-mobile-icons'
 import { Link } from "react-router-dom";
- 
 const Admin = () => {
+ 
     return (
         <List header='Admin Page'>
         <Link to="/addpage" style={{ color: 'black', textDecoration: 'none' }}><List.Item prefix={<AddSquareOutline />} onClick={() => {}}>

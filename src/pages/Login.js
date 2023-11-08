@@ -1,73 +1,51 @@
 import React from 'react';
-import { Button} from 'antd-mobile';
+// import { Button} from 'antd-mobile';
 import { Link } from "react-router-dom";
+import GoogleButton from 'react-google-button'
+import { getAuth, onAuthStateChanged, signInWithRedirect, getRedirectResult, GoogleAuthProvider  } from "firebase/auth";
 
-// export default () => {
-//   return (
-//     <>
-//       <DemoBlock title='填充模式'>
-//         <Space wrap>
-//           <Button color='primary' fill='solid'>
-//             Solid
-//           </Button>
-//           <Button color='primary' fill='outline'>
-//             Outline
-//           </Button>
-//           <Button color='primary' fill='none'>
-//             None
-//           </Button>
-//         </Space>
-//       </DemoBlock>
-
-//       <DemoBlock title='块级按钮'>
-//         <Button block color='primary' size='large'>
-//           Block Button
-//         </Button>
-//       </DemoBlock>
-
-//       <DemoBlock title='按钮尺寸'>
-//         <Space wrap align='center'>
-//           <Button size='mini' color='primary'>
-//             Mini
-//           </Button>
-//           <Button size='small' color='primary'>
-//             Small
-//           </Button>
-//           <Button size='middle' color='primary'>
-//             Middle
-//           </Button>
-//           <Button size='large' color='primary'>
-//             Large
-//           </Button>
-//         </Space>
-//       </DemoBlock>
-
-//       <DemoBlock title='语义按钮'>
-//         <Space wrap>
-//           <Button
-//             onClick={() => {
-//               alert('hello.')
-//             }}
-//           >
-//             Default
-//           </Button>
-//           <Button color='primary'>Primary</Button>
-//           <Button color='success'>Success</Button>
-//           <Button color='danger'>Danger</Button>
-//           <Button color='warning'>Warning</Button>
-//         </Space>
-//       </DemoBlock>
-//     </>
-//   )
-// }
- 
 export default function Login(){
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
     return (
         <>
             <h1>Login</h1>
-            <Link to="/admin" style={{ color: 'black', textDecoration: 'none' }}><Button color='primary' fill='solid'>
-             Log in
-            </Button></Link>
+            <Link to="/admin" style={{ color: 'black', textDecoration: 'none' }}>
+                <div className='google-button' onClick={()=>{
+                    // onAuthStateChanged(auth, (user) => {
+                    //     if (user) {
+                    //       // User is signed in, see docs for a list of available properties
+                    //       // https://firebase.google.com/docs/reference/js/auth.user
+                    //       const uid = user.uid;
+                    //       // ...
+                    //     } else {
+                    //       // User is signed out
+                    //       signInWithRedirect(auth, provider);
+                    //         getRedirectResult(auth)
+                    //         .then((result) => {
+                    //             // This gives you a Google Access Token. You can use it to access Google APIs.
+                    //             const credential = GoogleAuthProvider.credentialFromResult(result);
+                    //             const token = credential.accessToken;
+                        
+                    //             // The signed-in user info.
+                    //             const user = result.user;
+                    //             // IdP data available using getAdditionalUserInfo(result)
+                    //             // ...
+                    //         }).catch((error) => {
+                    //             // Handle Errors here.
+                    //             const errorCode = error.code;
+                    //             const errorMessage = error.message;
+                    //             // The email of the user's account used.
+                    //             const email = error.customData.email;
+                    //             // The AuthCredential type that was used.
+                    //             const credential = GoogleAuthProvider.credentialFromError(error);
+                    //             // ...
+                    //         });
+                    //             }
+                    //   }); 
+                    
+                }}><GoogleButton /></div>
+            </Link>
         </>
     );
 };

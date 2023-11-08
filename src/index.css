@@ -1,4 +1,8 @@
-body {
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -19,4 +23,20 @@ code {
 button-solid:focus {
   border: none;
   outline: none; 
+}
+
+.file-button {
+  border: none;
+  background-color: white;
+  margin-left: 90%;
+}
+file-button:focus {
+  border: none;
+  outline: none; 
+}
+
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
