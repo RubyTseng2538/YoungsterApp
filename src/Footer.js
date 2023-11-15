@@ -5,9 +5,11 @@ import {
     FolderOutline
   } from 'antd-mobile-icons'
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from './userContext';
 
 export default function Footer(){
   let navigate = useNavigate();
+  const {state,dispatch} = React.useContext(UserContext);
     return (
         <footer className="footer">
           <button className="button-solid" onClick={() => {
@@ -18,7 +20,7 @@ export default function Footer(){
             }}
           }><LeftOutline fontSize={24} style={{marginRight: '30%'}}/></button>
           <Link to="/" style={{ color: 'black', textDecoration: 'none' }}><FolderOutline /></Link>
-          <Link to="/login" style={{ color: 'black', textDecoration: 'none' }}><UserCircleOutline style={{marginLeft: '30%'}}/></Link>
+          <Link to= {state.user.email? "/admin" : "/login"} style={{ color: 'black', textDecoration: 'none' }}><UserCircleOutline style={{marginLeft: '30%'}}/></Link>
         </footer>
     );
 }

@@ -10,11 +10,13 @@ import Admin from './pages/Admin.js';
 import AddPage from './pages/Add.js';
 import EditPage from './pages/Edit.js';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { UserContext } from './userContext';
 
 
 
 
 function App() {
+  const {state, dispatch} = React.useContext(UserContext)
   return (
     <div className="App">
       <BrowserRouter>
