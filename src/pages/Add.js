@@ -7,7 +7,7 @@ import {
   Selector,
 } from 'antd-mobile';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc} from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 
@@ -26,6 +26,7 @@ const app = initializeApp(firebaseConfig);
  
 export default function AddPage(){
   const db = getFirestore(app);
+  // eslint-disable-next-line
   let fileValue;
 
     const onFinish = async (values: any) => {
@@ -38,9 +39,11 @@ export default function AddPage(){
       }
       
       if(values.file){
+        // eslint-disable-next-line
         const filename = values.file.replace(/^.*[\\\/]/, '');
         const storage = getStorage();
         const storageRef = ref(storage, filename);
+        // eslint-disable-next-line
         const fileUpload = await uploadBytes(storageRef, values.file);
         documentData.link = filename;
       }

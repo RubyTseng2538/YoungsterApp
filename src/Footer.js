@@ -9,7 +9,7 @@ import { UserContext } from './userContext';
 
 export default function Footer(){
   let navigate = useNavigate();
-  const {state,dispatch} = React.useContext(UserContext);
+  const {state} = React.useContext(UserContext);
     return (
         <footer className="footer">
           <button className="button-solid" onClick={() => {
