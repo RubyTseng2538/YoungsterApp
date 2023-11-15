@@ -9,7 +9,7 @@ import Login from './pages/Login.js';
 import Admin from './pages/Admin.js';
 import AddPage from './pages/Add.js';
 import EditPage from './pages/Edit.js';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 
 
@@ -17,7 +17,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <HashRouter>
         <Footer />
         <Routes>
           <Route path="/" element={<Navigation />}></Route>
@@ -29,7 +29,7 @@ function App() {
           <Route path='/addpage' element={<AddPage/>}></Route>
           <Route path='/editpage' element={<EditPage/>}></Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
       
     </div>
   );
