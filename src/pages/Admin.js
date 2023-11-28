@@ -12,7 +12,6 @@ import { UserContext } from '../userContext';
 
 const Admin = () => {
   const {state,dispatch} = React.useContext(UserContext);
-  console.log(state.user.email);
   const singout = () =>{
     const auth = getAuth();
     signOut(auth).then(() => {
