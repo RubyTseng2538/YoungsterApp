@@ -32,7 +32,7 @@ const FycdRoutes = () => {
         dispatch({type:'SET_USER',payload:{}})
       }
     });
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <Routes>

@@ -9,7 +9,8 @@ import { UserContext } from '../userContext';
 export default function Login(){
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
-    const {state,dispatch} = React.useContext(UserContext);
+    // eslint-disable-next-line
+    const {state, dispatch} = React.useContext(UserContext);
     const handleLogin = () =>{
             // User is signed out
             signInWithRedirect(auth, provider);
