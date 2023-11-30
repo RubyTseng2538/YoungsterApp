@@ -9,6 +9,8 @@ import Login from './pages/Login.js';
 import Admin from './pages/Admin.js';
 import AddPage from './pages/Add.js';
 import EditPage from './pages/Edit.js';
+import DocumentDisplay from './pages/DocumentDisplay.js'
+import VideoDisplay from './pages/VideoDisplay.js';
 import { HashRouter, Routes, Route } from "react-router-dom";
 import {onAuthStateChanged,getAuth} from 'firebase/auth';
 import { UserContext, UserProvider } from './userContext';
@@ -44,6 +46,8 @@ const FycdRoutes = () => {
           <Route path='/admin' element={<Admin />}></Route>
           <Route path='/addpage' element={<AddPage/>}></Route>
           <Route path='/editpage' element={<EditPage/>}></Route>
+          <Route path='/DocumentDisplay' element={<DocumentDisplay/>}></Route>
+          <Route path='/VideoDisplay' element={<VideoDisplay/>}></Route>
         </Routes>
   )
 }

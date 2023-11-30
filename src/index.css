@@ -40,3 +40,13 @@ file-button:focus {
   align-items: center;
   justify-content: center;
 }
+
+.player-wrapper {
+ position: relative;
+ padding-top: 56.25% 
+}
+
+.react-player {
+display:block;
+margin: auto;
+}

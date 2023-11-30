@@ -4,22 +4,22 @@ import { Cascader, Button, Space,  Form,
     Dialog} from 'antd-mobile'
   
 import { options} from './data.ts'
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs} from "firebase/firestore";
+// import { initializeApp } from 'firebase/app';
+// import { getFirestore, collection, getDocs} from "firebase/firestore";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDwCZ_ulcO61Ic0aQlNjnhR8oR9jaVzxTk",
-  authDomain: "youngster-p.firebaseapp.com",
-  projectId: "youngster-p",
-  storageBucket: "youngster-p.appspot.com",
-  messagingSenderId: "254927360049",
-  appId: "1:254927360049:web:25c1be08ea17eaaea34510",
-  measurementId: "G-VVEG3FZSCG"
+// const firebaseConfig = {
+//   apiKey: "AIzaSyDwCZ_ulcO61Ic0aQlNjnhR8oR9jaVzxTk",
+//   authDomain: "youngster-p.firebaseapp.com",
+//   projectId: "youngster-p",
+//   storageBucket: "youngster-p.appspot.com",
+//   messagingSenderId: "254927360049",
+//   appId: "1:254927360049:web:25c1be08ea17eaaea34510",
+//   measurementId: "G-VVEG3FZSCG"
 
-};
+// };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
 
 
  
@@ -67,14 +67,6 @@ const EditPage = () => {
 export default EditPage;
 
 function RenderChildrenDemo() {
-  const loadFiles = async () =>{
-    const querySnapshot = await getDocs(collection(db, "document"));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-    });
-  }
-   
     const [visible, setVisible] = useState(false)
     const [value, setValue] = useState([])
     return (
@@ -82,7 +74,6 @@ function RenderChildrenDemo() {
         <Button
           onClick={() => {
             setVisible(true)
-            loadFiles()
           }}
         >
           Choose the file you want to change
