@@ -31,6 +31,7 @@ const Documents = () => {
           arr.push(doc.get('name'));
       }
       });
+      arr.sort();
       setList(arr);
     }
     getDocumentList();

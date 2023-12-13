@@ -29,7 +29,7 @@ const DocumentDisplay = () =>{
             const querySnapshot = await getDocs(page);
             querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
-                setDoc(doc.data());
+                setDoc(doc.get('link'));
             });
         }
         getDocumentInfo();
@@ -37,7 +37,12 @@ const DocumentDisplay = () =>{
     }, [])
     console.log(doc);
     return(
-        <h1>{pageName}</h1>
+        <div style={{overflow:'scroll',height:600}}>
+            <h1>{pageName}</h1>
+           </div>
+        
+        
+
     )
 }
 export default DocumentDisplay;

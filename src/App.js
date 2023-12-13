@@ -11,6 +11,7 @@ import AddPage from './pages/Add.js';
 import EditPage from './pages/Edit.js';
 import DocumentDisplay from './pages/DocumentDisplay.js'
 import VideoDisplay from './pages/VideoDisplay.js';
+import AudioDisplay from './pages/audioDisplay.js';
 import { HashRouter, Routes, Route } from "react-router-dom";
 import {onAuthStateChanged,getAuth} from 'firebase/auth';
 import { UserContext, UserProvider } from './userContext';
@@ -48,6 +49,7 @@ const FycdRoutes = () => {
           <Route path='/editpage' element={<EditPage/>}></Route>
           <Route path='/DocumentDisplay' element={<DocumentDisplay/>}></Route>
           <Route path='/VideoDisplay' element={<VideoDisplay/>}></Route>
+          <Route path='/AudioDisplay' element={<AudioDisplay/>}></Route>
         </Routes>
   )
 }

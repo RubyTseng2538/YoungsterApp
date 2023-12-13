@@ -30,6 +30,7 @@ const Video = () => {
           arr.push(doc.get('name'));
       }
       });
+      arr.sort();
       setList(arr);
     }
     getVideoList();

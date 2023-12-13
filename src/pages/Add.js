@@ -37,7 +37,7 @@ export default function AddPage(){
         link: values.filelink,
         last_edit_time: date,
       }
-      
+      console.log(values.file);
       if(values.file){
         // eslint-disable-next-line
         const filename = values.file.replace(/^.*[\\\/]/, '');

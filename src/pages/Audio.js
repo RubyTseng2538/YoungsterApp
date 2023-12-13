@@ -2,6 +2,7 @@ import React, {useState, useEffect } from 'react';
 import { List } from 'antd-mobile';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs} from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDwCZ_ulcO61Ic0aQlNjnhR8oR9jaVzxTk",
@@ -29,6 +30,7 @@ const Audio = () => {
           arr.push(doc.get('name'));
       }
       });
+      arr.sort();
       setList(arr);
     }
     getAudioList();
@@ -37,7 +39,13 @@ const Audio = () => {
         <div style={{ height: window.innerHeight }}>
           {<List header='Audio'>
               {list.map((item, index) => (
+                <Link
+                to="/AudioDisplay" style={{ color: 'black', textDecoration: 'none' }}
+                state={{
+                  pagename: item
+                }}>
                 <List.Item key={index} onClick={()=>{}}>{item}</List.Item>
+                </Link>
               ))}
           </List>}
         </div>

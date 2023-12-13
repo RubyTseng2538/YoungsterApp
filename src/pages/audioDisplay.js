@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, query, where, getDocs} from "firebase/firestore";
-import YouTube from 'react-youtube';
-import getYouTubeID from 'get-youtube-id';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDwCZ_ulcO61Ic0aQlNjnhR8oR9jaVzxTk",
@@ -19,42 +19,38 @@ const firebaseConfig = {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  const docRef = collection(db, "video");
+  const docRef = collection(db, "audio");
 
-const VideoDisplay = () =>{
+const AudioDisplay = () =>{
     const [doc, setDoc] = useState([]);
     const location = useLocation();
     const pageName = location.state.pagename;
     const page = query(docRef, where("name", "==", pageName));
     useEffect(()=>{
-        async function getVideoInfo(){
+        async function getAudioInfo(){
             const querySnapshot = await getDocs(page);
             querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
-                setDoc(getYouTubeID(doc.get('link')));
-                console.log(doc.get('link'));
+                setDoc(doc.get('link'));
             });
         }
-        getVideoInfo();
+        getAudioInfo();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    const opts = {
-        height: '100%',
-        width: '90%',
-        playerVars: {
-          // https://developers.google.com/youtube/player_parameters
-          autoplay: 1,
-        },
-      };
-
+    console.log(doc);
     return(
         <div>
             <h1>{pageName}</h1>
-            <div className='video-wrapper'>
-            <YouTube videoId={doc} opts={opts} />
-            </div>
-        </div>
+            <AudioPlayer
+                autoPlay
+                src={doc}
+                onPlay={e => console.log("onPlay")}
+                // other props here
+            />
+           </div>
         
+        
+
     )
 }
-export default VideoDisplay;
+export default AudioDisplay;
