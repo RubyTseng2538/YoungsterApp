@@ -28,23 +28,24 @@ export default function AddPage(){
   const db = getFirestore(app);
   // eslint-disable-next-line
   let fileValue;
+  let fileData = document.getElementById("fileData").files[0];
 
     const onFinish = async (values: any) => {
       const date = new Date();
       const documentData = {
         name: values.pagename,
         type: values.filetype[0],
-        link: values.filelink,
+        link: fileData,
         last_edit_time: date,
       }
-      console.log(values.file);
-      if(values.file){
+      console.log(fileData);
+      if(fileData){
         // eslint-disable-next-line
-        const filename = values.file.replace(/^.*[\\\/]/, '');
+        const filename = fileData.name;
         const storage = getStorage();
         const storageRef = ref(storage, filename);
         // eslint-disable-next-line
-        const fileUpload = await uploadBytes(storageRef, values.file);
+        const fileUpload = await uploadBytes(storageRef, fileData);
         documentData.link = filename;
       }
       
@@ -53,7 +54,7 @@ export default function AddPage(){
       await addDoc(collection(db, values.filetype[0]), documentData);
 
         Dialog.alert({
-          content: <pre>{JSON.stringify(values, null, 2)}</pre>,
+          content: <pre>File Added!</pre>,
         })
       }
     return (
@@ -92,7 +93,7 @@ export default function AddPage(){
             name='file'
             label='Upload File'
           >
-            <input type="file" name='file' style={{marginRight: "80%"}}></input>
+            <input type="file" name='file' id='fileData' style={{marginRight: "80%"}}></input>
           </Form.Item>
           <Form.Item
             name='filelink'
