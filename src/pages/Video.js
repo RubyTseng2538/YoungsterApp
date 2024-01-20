@@ -38,15 +38,11 @@ const Video = () => {
   return (
   <div style={{ height: window.innerHeight }}>
     {<List header='Videos'>
-        {list.map((item, index) => (
-          <Link
-          to="/VideoDisplay" style={{ color: 'black', textDecoration: 'none' }}
-          state={{
-            pagename: item
-          }}>
-          <List.Item key={index} onClick={()=>{}}>{item}</List.Item>
-          </Link>
-        ))}
+    {list.map((item, index) => (
+            <List.Item key={index} onClick={()=>{
+              navigate('/VideoDisplay', {state: {pagename: item}})
+            }}>{item}</List.Item>
+          ))}
     </List>}
   </div>
   );

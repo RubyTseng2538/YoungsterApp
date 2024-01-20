@@ -2,7 +2,7 @@ import React, {useState, useEffect } from 'react';
 import { List } from 'antd-mobile';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs} from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDwCZ_ulcO61Ic0aQlNjnhR8oR9jaVzxTk",
@@ -35,18 +35,15 @@ const Audio = () => {
     }
     getAudioList();
   }, []) 
+  let navigate = useNavigate();
         return (
         <div style={{ height: window.innerHeight }}>
           {<List header='Audio'>
-              {list.map((item, index) => (
-                <Link
-                to="/AudioDisplay" style={{ color: 'black', textDecoration: 'none' }}
-                state={{
-                  pagename: item
-                }}>
-                <List.Item key={index} onClick={()=>{}}>{item}</List.Item>
-                </Link>
-              ))}
+          {list.map((item, index) => (
+            <List.Item key={index} onClick={()=>{
+              navigate('/AudioDisplay', {state: {pagename: item}})
+            }}>{item}</List.Item>
+          ))}
           </List>}
         </div>
         );
