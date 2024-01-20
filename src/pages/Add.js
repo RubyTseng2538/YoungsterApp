@@ -27,7 +27,7 @@ const app = initializeApp(firebaseConfig);
 export default function AddPage(){
   const db = getFirestore(app);
   // eslint-disable-next-line
-  let fileValue = document.getElementById(file);
+  let fileValue;
 
     const onFinish = async (values: any) => {
       const date = new Date();
@@ -44,7 +44,7 @@ export default function AddPage(){
         const storage = getStorage();
         const storageRef = ref(storage, filename);
         // eslint-disable-next-line
-        const fileUpload = await uploadBytes(storageRef, fileValue);
+        const fileUpload = await uploadBytes(storageRef, values.file);
         documentData.link = filename;
       }
       
@@ -85,13 +85,14 @@ export default function AddPage(){
                 { label: 'Audio', value: 'audio' },
                 { label: 'Video', value: 'video' },
               ]}
+              onChange={(arr) => console.log(fileValue = arr[0])}
             />
           </Form.Item>
           <Form.Item
             name='file'
             label='Upload File'
           >
-            <input type="file" name='file' id='file' style={{marginRight: "80%"}}></input>
+            <input type="file" name='file' style={{marginRight: "80%"}}></input>
           </Form.Item>
           <Form.Item
             name='filelink'

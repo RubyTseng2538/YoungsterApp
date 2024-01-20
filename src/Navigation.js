@@ -5,20 +5,21 @@ import {
     SoundOutline,
     VideoOutline,
   } from 'antd-mobile-icons'
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Navigation(){
+  let navigate = useNavigate();
     return (
         <List header='Materials'>
-        <Link to="/documents" style={{ color: 'black', textDecoration: 'none' }}><List.Item prefix={<FileOutline />} onClick={() => {}}>
+        <List.Item prefix={<FileOutline />} onClick={() => {navigate('/documents')}}>
           Documents
-        </List.Item></Link>
-        <Link to="/audio" style={{ color: 'black', textDecoration: 'none' }}><List.Item prefix={<SoundOutline />} onClick={() => {}}>
+        </List.Item>
+        <List.Item prefix={<SoundOutline />} onClick={() => {navigate('/audio')}}>
           Audios
-        </List.Item></Link>
-        <Link to="/video" style={{ color: 'black', textDecoration: 'none' }}><List.Item prefix={<VideoOutline />} onClick={() => {}}>
+        </List.Item>
+        <List.Item prefix={<VideoOutline />} onClick={() => {navigate('/video')}}>
           Videos
-        </List.Item></Link>
+        </List.Item>
         </List>
     );
 }
