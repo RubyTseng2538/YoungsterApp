@@ -1,103 +1,197 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Cascader, Button, Space,  Form,
     Input,
     Dialog} from 'antd-mobile'
   
-import { options} from './data.ts'
-// import { initializeApp } from 'firebase/app';
-// import { getFirestore, collection, getDocs} from "firebase/firestore";
+// import { options} from './data.ts'
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs, updateDoc, doc, query, where} from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDwCZ_ulcO61Ic0aQlNjnhR8oR9jaVzxTk",
-//   authDomain: "youngster-p.firebaseapp.com",
-//   projectId: "youngster-p",
-//   storageBucket: "youngster-p.appspot.com",
-//   messagingSenderId: "254927360049",
-//   appId: "1:254927360049:web:25c1be08ea17eaaea34510",
-//   measurementId: "G-VVEG3FZSCG"
+const firebaseConfig = {
+  apiKey: "AIzaSyDwCZ_ulcO61Ic0aQlNjnhR8oR9jaVzxTk",
+  authDomain: "youngster-p.firebaseapp.com",
+  projectId: "youngster-p",
+  storageBucket: "youngster-p.appspot.com",
+  messagingSenderId: "254927360049",
+  appId: "1:254927360049:web:25c1be08ea17eaaea34510",
+  measurementId: "G-VVEG3FZSCG"
 
-// };
+};
 
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 
  
 const EditPage = () => {
-    const onFinish = (values: any) => {
-        Dialog.alert({
-          content: <pre>{JSON.stringify(values, null, 2)}</pre>,
-        })
+  const [visible, setVisible] = useState(false);
+  const [value, setValue] = useState([]);
+  const [document, setDoc] = useState([]);
+  const [video, setVid] = useState([]);
+  const [audio, setAud] = useState([]);
+  let options = [];
+  useEffect(()=>{
+    async function getDocumentList(){
+      const arr1 = [];
+      const querySnapshot = await getDocs(collection(db, "document"));
+      querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots   
+          arr1.push({
+            label :doc.get('name'),
+            value :doc.get('name')});
+      });
+      arr1.sort();
+      setDoc(arr1);
+    }
+    getDocumentList();
+    async function getAudioList(){
+      const arr2 = [];
+      const querySnapshot = await getDocs(collection(db, "audio"));
+      querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+          arr2.push({
+            label :doc.get('name'),
+            value :doc.get('name')});
+      });
+      arr2.sort();
+      setAud(arr2);
+    }
+    getAudioList();
+    async function getVideoList(){
+      const arr3 = [];
+      const querySnapshot = await getDocs(collection(db, "video"));
+      querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+          arr3.push({
+            label :doc.get('name'),
+            value :doc.get('name')});
+      });
+      arr3.sort();
+      setVid(arr3);
+    }
+    getVideoList();
+  }
+  , []);
+  
+  if(document.length !==0 && audio.length !== 0 && video.length !== 0){
+    options = [
+      {
+        label: 'document',
+        value: 'document',
+        children: document
+      },
+      {
+        label: 'audio',
+        value: 'audio',
+        children: audio
+      },
+      {
+        label: 'video',
+        value: 'video',
+        children: video
       }
-    return (
-        <div>
-        <Form
-          name='form'
-          layout='horizontal'
-          onFinish={onFinish}
-          footer={
-            <Button block type='submit' color='primary' size='large'>
-              Submit
-            </Button>
-          }
+    ]
+  }
+  const onFinish = async (values: any) => {
+    console.log(values)
+    let docRef = collection(db, value[0]);
+    const page = query(docRef, where("name", "==", value[1]));
+    const querySnapshot = await getDocs(page);
+    let docId;
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      docId = doc.id;
+  });
+    const date = new Date();
+    let name = values.pagename;
+    let fileData = document.getElementById('fileData').files[0];
+    let link = values.filelink;
+    if(name){
+      await updateDoc(doc(db, value[0], docId), {name: name, last_edit_time: date});
+    }
+    if(fileData){
+      const filename = fileData.name;
+      const storage = getStorage();
+      const storageRef = ref(storage, filename);
+      // eslint-disable-next-line
+      const fileUpload = await uploadBytes(storageRef, fileData);
+      await updateDoc(doc(db, value[0], docId), {link: filename, last_edit_time: date});
+    }
+    if(link){
+      await updateDoc(doc(db, value[0], docId), {link: link, last_edit_time:date});
+    }
+      Dialog.alert({
+        content: <pre>{value[1]} is Edited!</pre>,
+      })
+    }
+  const onDelete = () =>{
+
+  }
+  return (
+      <div>
+      <Form
+        name='form'
+        layout='horizontal'
+        onFinish={onFinish}
+        footer={
+          <Button block type='submit' color='primary' size='large'>
+            Submit
+          </Button>
+        }
+      >
+        <Form.Header>Edit Page</Form.Header>
+        <Space align='center'>
+          <Button
+            onClick={() => {
+              setVisible(true)
+            }}
+          >
+            Choose the file you want to change
+          </Button>
+          <Cascader
+            options={options}
+            visible={visible}
+            onClose={() => {
+              setVisible(false)
+            }}
+            value={value}
+            onConfirm={setValue}
+          >
+            {items => {
+              if (items.every(item => item === null)) {
+                return 'no file selected'
+              } else {
+                return items.map(item => item?.label ?? 'no file selected').join('-')
+              }
+            }}
+          </Cascader>
+        </Space>
+        <Form.Item
+          name='pagename'
+          label='Change page name'
         >
-          <Form.Header>Edit Page</Form.Header>
-          <RenderChildrenDemo/>
-          <Form.Item
-            name='pagename'
-            label='Change page name'
-            rules={[{ required: true, message: 'page name cannot be empty' }]}
-          >
-            <Input onChange={console.log} placeholder='please enter a name for the page' />
-          </Form.Item>
-          <Form.Item
+          <Input placeholder='please enter a name for the page' />
+        </Form.Item>
+        <Form.Item
             name='file'
-            label='Upload New File'
+            label='Upload File'
           >
-            <Input onChange={console.log} placeholder='please upload the file' />
+            <input type="file" name='file' id='fileData' style={{marginRight: "80%"}}></input>
           </Form.Item>
-        </Form>
-        <Button block type='submit' color='danger' size='large'>
-          Delete File
-        </Button>
-        </div>
-    );
+        <Form.Item
+            name='filelink'
+            label='Link to the video'
+          >
+            <Input placeholder='please enter the link to the video' />
+          </Form.Item>
+      </Form>
+      <Button block type='submit' onClick={onDelete} color='danger' size='large'>
+        Delete File
+      </Button>
+      </div>
+  );
 };
  
 export default EditPage;
 
-function RenderChildrenDemo() {
-    const [visible, setVisible] = useState(false)
-    const [value, setValue] = useState([])
-    return (
-      <Space align='center'>
-        <Button
-          onClick={() => {
-            setVisible(true)
-          }}
-        >
-          Choose the file you want to change
-        </Button>
-        <Cascader
-          options={options}
-          visible={visible}
-          onClose={() => {
-            setVisible(false)
-          }}
-          value={value}
-          onConfirm={setValue}
-          onSelect={(val, extend) => {
-            console.log('onSelect', val, extend.items)
-          }}
-        >
-          {items => {
-            if (items.every(item => item === null)) {
-              return 'no file selected'
-            } else {
-              return items.map(item => item?.label ?? 'no file selected').join('-')
-            }
-          }}
-        </Cascader>
-      </Space>
-    )
-  }

@@ -28,14 +28,14 @@ export default function AddPage(){
   const db = getFirestore(app);
   // eslint-disable-next-line
   let fileValue;
-  let fileData = document.getElementById("fileData").files[0];
 
     const onFinish = async (values: any) => {
+      let fileData = document.getElementById("fileData").files[0];
       const date = new Date();
       const documentData = {
         name: values.pagename,
         type: values.filetype[0],
-        link: fileData,
+        link: values.filelink,
         last_edit_time: date,
       }
       console.log(fileData);

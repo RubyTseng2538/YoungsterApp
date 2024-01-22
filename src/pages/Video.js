@@ -26,9 +26,9 @@ const Video = () => {
       const querySnapshot = await getDocs(collection(db, "video"));
       querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      if(!arr.includes(doc.get('name'))){
+     
           arr.push(doc.get('name'));
-      }
+   
       });
       arr.sort();
       setList(arr);
