@@ -4,8 +4,8 @@ import { Cascader, Button, Space,  Form,
     Dialog} from 'antd-mobile'
   
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, updateDoc, doc, query, where} from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getFirestore, collection, getDocs, updateDoc, doc, query, where, deleteDoc} from "firebase/firestore";
+import { getStorage, ref, uploadBytes, deleteObject } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDwCZ_ulcO61Ic0aQlNjnhR8oR9jaVzxTk",
@@ -26,7 +26,7 @@ const db = getFirestore(app);
 const EditPage = () => {
   const [visible, setVisible] = useState(false);
   const [value, setValue] = useState([]);
-  const [document, setDoc] = useState([]);
+  const [docu, setDoc] = useState([]);
   const [video, setVid] = useState([]);
   const [audio, setAud] = useState([]);
   let options = [];
@@ -78,7 +78,7 @@ const EditPage = () => {
       {
         label: 'document',
         value: 'document',
-        children: document
+        children: docu
       },
       {
         label: 'audio',
@@ -98,13 +98,15 @@ const EditPage = () => {
     const page = query(docRef, where("name", "==", value[1]));
     const querySnapshot = await getDocs(page);
     let docId;
+    let oldLink;
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       docId = doc.id;
+      oldLink = doc.get('link')
   });
     const date = new Date();
     let name = values.pagename;
-    let fileData = document.getElementById('fileData').files[0];
+    const fileData = document.getElementById("fileData").files[0];
     let link = values.filelink;
     if(name){
       await updateDoc(doc(db, value[0], docId), {name: name, last_edit_time: date});
@@ -112,6 +114,8 @@ const EditPage = () => {
     if(fileData){
       const filename = fileData.name;
       const storage = getStorage();
+      const fileRef = ref(storage, oldLink);
+      deleteObject(fileRef);
       const storageRef = ref(storage, filename);
       // eslint-disable-next-line
       const fileUpload = await uploadBytes(storageRef, fileData);
@@ -124,70 +128,88 @@ const EditPage = () => {
         content: <pre>{value[1]} is Edited!</pre>,
       })
     }
-  const onDelete = () =>{
-
+  const onDelete = async() =>{
+    let docRef = collection(db, value[0]);
+    const page = query(docRef, where("name", "==", value[1]));
+    const querySnapshot = await getDocs(page);
+    let docId;
+    let oldLink;
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      docId = doc.id;
+      oldLink = doc.get('link')
+    });
+    if(value[0] === 'document'){
+      const storage = getStorage();
+      const fileRef = ref(storage, oldLink);
+      deleteObject(fileRef);
+    }
+    await deleteDoc(doc(db, value[0], docId));
+    Dialog.alert({
+      content: <pre>{value[1]} is Deleted!</pre>,
+    })
   }
   return (
       <div>
-      <Form
-        name='form'
-        layout='horizontal'
-        onFinish={onFinish}
-        footer={
-          <Button block type='submit' color='primary' size='large'>
-            Submit
-          </Button>
-        }
-      >
-        <Form.Header>Edit Page</Form.Header>
-        <Space align='center'>
-          <Button
-            onClick={() => {
-              setVisible(true)
-            }}
-          >
-            Choose the file you want to change
-          </Button>
-          <Cascader
-            options={options}
-            visible={visible}
-            onClose={() => {
-              setVisible(false)
-            }}
-            value={value}
-            onConfirm={setValue}
-          >
-            {items => {
-              if (items.every(item => item === null)) {
-                return 'no file selected'
-              } else {
-                return items.map(item => item?.label ?? 'no file selected').join('-')
-              }
-            }}
-          </Cascader>
-        </Space>
-        <Form.Item
-          name='pagename'
-          label='Change page name'
+        <Form
+          name='form'
+          layout='horizontal'
+          onFinish={onFinish}
+          footer={
+            <Button block type='submit' color='primary' size='large'>
+              Submit
+            </Button>
+          }
         >
-          <Input placeholder='please enter a name for the page' />
-        </Form.Item>
-        <Form.Item
-            name='file'
-            label='Upload File'
+          <Form.Header>Edit Page</Form.Header>
+          <Space align='center'>
+            <Button
+              onClick={() => {
+                setVisible(true)
+              }}
+            >
+              Choose the file you want to change
+            </Button>
+            <Cascader
+              options={options}
+              visible={visible}
+              onClose={() => {
+                setVisible(false)
+              }}
+              value={value}
+              onConfirm={setValue}
+            >
+              {items => {
+                if (items.every(item => item === null)) {
+                  return 'no file selected'
+                } else {
+                  return items.map(item => item?.label ?? 'no file selected').join('-')
+                }
+              }}
+            </Cascader>
+          </Space>
+          <Form.Item
+            name='pagename'
+            label='Change page name'
           >
-            <input type="file" name='file' id='fileData' style={{marginRight: "80%"}}></input>
+            <Input placeholder='please enter a name for the page' />
           </Form.Item>
-        <Form.Item
-            name='filelink'
-            label='Link to the video'
-          >
-            <Input placeholder='please enter the link to the video' />
+          <Form.Item
+              name='file'
+              label='Upload File'
+            >
+      <input type="file" name='file' id='fileData' style={{marginRight: "80%"}}></input>
           </Form.Item>
-      </Form>
-      <Button block type='submit' onClick={onDelete} color='danger' size='large'>
-        Delete File
-      </Button>
+          <Form.Item
+              name='filelink'
+              label='Link to the video'
+            >
+              <Input placeholder='please enter the link to the video' />
+            </Form.Item>
+        </Form>
+        <Button block type='submit' onClick={onDelete} color='danger' size='large'>
+          Delete File
+        </Button>
       </div>
   );
 };

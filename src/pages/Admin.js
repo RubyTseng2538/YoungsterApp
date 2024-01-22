@@ -5,13 +5,14 @@ import {
     EditSOutline,
     ExclamationCircleOutline
   } from 'antd-mobile-icons'
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { UserContext } from '../userContext';
 
 
 const Admin = () => {
   const {state,dispatch} = React.useContext(UserContext);
+  let navigate = useNavigate();
   const singout = () =>{
     const auth = getAuth();
     signOut(auth).then(() => {
@@ -22,19 +23,20 @@ const Admin = () => {
     if(state.user.email){
       dispatch({type:'SET_USER',payload:{}})
     }
+    navigate('/')
   }
- 
+  
     return (
         <List header='Admin Page'>
-        <Link to="/addpage" style={{ color: 'black', textDecoration: 'none' }}><List.Item prefix={<AddSquareOutline />} onClick={() => {}}>
+        <List.Item prefix={<AddSquareOutline />} onClick={() => {navigate('/addpage')}}>
           Add page
-        </List.Item></Link>
-        <Link to="/editpage" style={{ color: 'black', textDecoration: 'none' }}><List.Item prefix={<EditSOutline />} onClick={() => {}}>
+        </List.Item>
+        <List.Item prefix={<EditSOutline />} onClick={() => {navigate('/editpage')}}>
           Edit page
-        </List.Item></Link>
-        <Link to="/" style={{ color: 'black', textDecoration: 'none' }}><List.Item prefix={<ExclamationCircleOutline />} onClick={singout}>
+        </List.Item>
+        <List.Item prefix={<ExclamationCircleOutline />} onClick={singout}>
           Log out
-          </List.Item></Link>
+          </List.Item>
         </List>
     );
 };
