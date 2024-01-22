@@ -3,7 +3,6 @@ import { Cascader, Button, Space,  Form,
     Input,
     Dialog} from 'antd-mobile'
   
-// import { options} from './data.ts'
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, updateDoc, doc, query, where} from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
