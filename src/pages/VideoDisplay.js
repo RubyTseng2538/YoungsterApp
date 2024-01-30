@@ -22,7 +22,7 @@ const firebaseConfig = {
   const docRef = collection(db, "video");
 
 const VideoDisplay = () =>{
-    const [doc, setDoc] = useState([]);
+    const [doc, setDoc] = useState("");
     const location = useLocation();
     const pageName = location.state.pagename;
     const page = query(docRef, where("name", "==", pageName));
@@ -43,7 +43,7 @@ const VideoDisplay = () =>{
         width: '90%',
         playerVars: {
           // https://developers.google.com/youtube/player_parameters
-          autoplay: 1,
+          autoplay: 1
         },
       };
 

@@ -4,6 +4,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, query, where, getDocs} from "firebase/firestore";
 import { MobilePDFReader } from 'react-read-pdf';
 import { getStorage, ref, getBlob} from "firebase/storage";
+import Footer from '../Footer.js';
 
 
 const firebaseConfig = {
@@ -51,7 +52,8 @@ const DocumentDisplay = () =>{
     return(
 
         <div style={{overflow:'scroll',  height: 300}}>
-            <MobilePDFReader url={fileData} />
+            <MobilePDFReader url={fileData} page={1}/>
+            <Footer/>
            </div>
         
         
