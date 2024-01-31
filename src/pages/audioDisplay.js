@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, query, where, getDocs} from "firebase/firestore";
-import { getStorage, ref, getDownloadURL} from "firebase/storage";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 
@@ -23,29 +22,23 @@ const firebaseConfig = {
   const docRef = collection(db, "audio");
 
 const AudioDisplay = () =>{
-    const [fileData, setData] = useState("");
+    const [doc, setDoc] = useState("");
     const location = useLocation();
     const pageName = location.state.pagename;
     const page = query(docRef, where("name", "==", pageName));
     useEffect(()=>{
         async function getAudioInfo(){
             const querySnapshot = await getDocs(page);
-            async function getStorageInfo(x){
-                const storage = getStorage();
-                // const url = 'gs://youngster-p.appspot.com/'+ doc
-                const fileURL = await getDownloadURL(ref(storage, x));
-                setData(fileURL);
-            }
             querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
-                getStorageInfo(doc.get('link'));
+                setDoc((doc.get('link')));
+                console.log(doc.get('link'));
             });
         }
         getAudioInfo();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    console.log(fileData);
-    if(!fileData){
+    if(!doc){
         return(
             <div>Loading</div>
         )
@@ -55,7 +48,7 @@ const AudioDisplay = () =>{
             <h1>{pageName}</h1>
             <AudioPlayer
                 autoPlay
-                src={fileData}
+                src={doc}
                 onPlay={e => console.log("onPlay")}
                 // other props here
             />

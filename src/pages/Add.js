@@ -83,7 +83,7 @@ export default function AddPage(){
               initialValue={'document'}
               options={[
                 { label: 'Doc', value: 'document' },
-                { label: 'Audio', value: 'audio' },
+                // { label: 'Audio', value: 'audio' },
                 { label: 'Video', value: 'video' },
               ]}
               onChange={(arr) => console.log(fileValue = arr[0])}

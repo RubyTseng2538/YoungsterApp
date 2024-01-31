@@ -80,11 +80,11 @@ const EditPage = () => {
         value: 'document',
         children: docu
       },
-      {
-        label: 'audio',
-        value: 'audio',
-        children: audio
-      },
+      // {
+      //   label: 'audio',
+      //   value: 'audio',
+      //   children: audio
+      // },
       {
         label: 'video',
         value: 'video',

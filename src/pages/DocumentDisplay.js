@@ -52,7 +52,7 @@ const DocumentDisplay = () =>{
     return(
 
         <div style={{overflow:'scroll',  height: 300}}>
-            <MobilePDFReader url={fileData} page={1}/>
+            <MobilePDFReader url={fileData} page={1} isShowFooter={false} isDhowHeader={false}/>
             <Footer/>
            </div>
         
