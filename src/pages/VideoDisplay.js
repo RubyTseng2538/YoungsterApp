@@ -39,7 +39,7 @@ const VideoDisplay = () =>{
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const opts = {
-        height: '100%',
+        height: '350px',
         width: '90%',
         playerVars: {
           // https://developers.google.com/youtube/player_parameters

@@ -178,6 +178,9 @@ const EditPage = () => {
               }}
               value={value}
               onConfirm={setValue}
+              cancelText = 'Cancel'
+              confirmText = 'Confirm'
+              placeholder='Options'
             >
               {items => {
                 if (items.every(item => item === null)) {
