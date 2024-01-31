@@ -44,18 +44,20 @@ const DocumentDisplay = () =>{
         getDocumentInfo();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    console.log(pageName);
     if(!fileData){
         return(
             <div>Loading</div>
         )
     }
     return(
-
+        <div>
+            <p>{pageName}</p>
         <div style={{overflow:'scroll',  height: 300}}>
-            <MobilePDFReader url={fileData} page={1} isShowFooter={false} isDhowHeader={false}/>
+            <MobilePDFReader url={fileData} page={1} isShowFooter={false} isShowHeader={false}/>
             <Footer/>
            </div>
-        
+           </div>
         
 
     )
