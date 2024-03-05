@@ -10,13 +10,13 @@ const userReducer =(state,action) => {
 }
 
 const initialState = {
-    user:{ }
+    user:{ },
 }
 
 export const UserContext = React.createContext({state:initialState});
 
 export const UserProvider  = ({children}) => {
-    const [ state, dispatch] = useReducer(userReducer,initialState);
+    const [ state, dispatch] = useReducer(userReducer, initialState);
 
     const contextValue = useMemo(()=>({state,dispatch}),[state])
     return (

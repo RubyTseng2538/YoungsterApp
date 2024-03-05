@@ -20,13 +20,13 @@ const Admin = () => {
     }).catch((error) => {
       // An error happened.
     });
-    if(state.user.email){
+    if(state.user){
       dispatch({type:'SET_USER',payload:{}})
     }
-    navigate('/')
+    navigate('/');
   }
-  
     return (
+      <div>
         <List header='Admin Page'>
         <List.Item prefix={<AddSquareOutline />} onClick={() => {navigate('/addpage')}}>
           Add page
@@ -38,6 +38,7 @@ const Admin = () => {
           Log out
           </List.Item>
         </List>
+      </div>
     );
 };
  
