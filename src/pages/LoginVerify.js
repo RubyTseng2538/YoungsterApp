@@ -41,15 +41,12 @@ const LoginVerify = () => {
         }
         userList.push(user);
     }); 
-    console.log("pass userList");
-    console.log(userList, state.user.id);
     let currentUser;
     for(let i = 0; i< userList.length; i++){
       if (userList[i].UID === state.user.id){
         currentUser = userList[i];
       }
     }
-    console.log(currentUser);
     if(currentUser){
       if(currentUser.email === state.user.email){
         admin = true;

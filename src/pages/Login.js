@@ -1,20 +1,26 @@
 import React from 'react';
-import { Link } from "react-router-dom";
-import GoogleButton from 'react-google-button'
+import { useNavigate } from "react-router-dom";
+import GoogleButton from 'react-google-button';
 import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider} from "firebase/auth";
 import { UserContext } from '../userContext';
 
 export default function Login(){
+    const navigate = useNavigate();
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
     const {state, dispatch} = React.useContext(UserContext);
+    if(state.user.id){
+        navigate("/LoginVerify");
+    }
 
-
-    const handleLogin = async () => {
+    const handleLogin = () => {
         signInWithRedirect(auth, provider);
         getRedirectResult(auth)
-        .then(async (result) => {
-    
+        .then((result) => {
+
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+
             const loginUser = {
                 id: result.user.uid, // Using uid instead of id
                 name: result.user.displayName,
@@ -22,7 +28,7 @@ export default function Login(){
             }
     
             dispatch({type: 'SET_USER', payload: {loginUser}});
-            console.log(state.user, "login");
+
         }).catch((error) => {
             console.error("Error signing in with Google:", error);
         });
@@ -33,9 +39,7 @@ export default function Login(){
     return (
         <>
             <h1>Login</h1>
-            <Link to={state.user.id ? "/LoginVerify" : "/"} style={{ color: 'black', textDecoration: 'none' }}>
-                <div className='google-button' onClick={handleLogin}><GoogleButton /></div>
-            </Link>
+            <div className='google-button' onClick={handleLogin}><GoogleButton /></div>
         </>
     );
 };
