@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import GoogleButton from 'react-google-button';
 import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider} from "firebase/auth";
 import { UserContext } from '../userContext';
@@ -19,6 +19,7 @@ export default function Login(){
         .then((result) => {
 
             const credential = GoogleAuthProvider.credentialFromResult(result);
+            // eslint-disable-next-line
             const token = credential.accessToken;
 
             const loginUser = {
@@ -34,6 +35,7 @@ export default function Login(){
         });
 
     }
+
     
 
     return (
