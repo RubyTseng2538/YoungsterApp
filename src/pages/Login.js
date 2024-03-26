@@ -27,8 +27,6 @@ export default function Login(){
                 name: result.user.displayName,
                 email: result.user.email
             }
-    
-            dispatch({type: 'SET_USER', payload: {loginUser}});
 
         }).catch((error) => {
             console.error("Error signing in with Google:", error);

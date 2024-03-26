@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Navigation from './Navigation.js';
 import Documents from './pages/Document.js';
@@ -20,21 +20,28 @@ import { useNavigate } from "react-router-dom";
 
 const FycdRoutes = () => {
   const {dispatch} = React.useContext(UserContext);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
+      setLoading(true);
       if (user) {
         const loginUser = {
           id: user.uid,
           name: user.displayName,
           email: user.email
-      }
-      dispatch({type:'SET_USER',payload:loginUser})
-      navigate('/');
+        }
+        let admin = LoginVerify(loginUser);
+        if(admin == true){
+          dispatch({type:'SET_USER',payload:loginUser});
+        }else{
+          dispatch({type:'SET_USER',payload:{}});
+        }
       } else {
-        dispatch({type:'SET_USER',payload:{}})
+        dispatch({type:'SET_USER',payload:{}});
       }
+      setLoading(false);
     });
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

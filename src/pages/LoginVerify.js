@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {useNavigate } from "react-router-dom";
 import { UserContext } from '../userContext';
 import { initializeApp } from 'firebase/app';
@@ -26,68 +26,13 @@ onAuthStateChanged(auth, (user)=>{
   }
 });
 
-let admin = false;
-const LoginVerify = () => {
-  let navigate = useNavigate();
-  const {state, dispatch} = React.useContext(UserContext);
-  const checkUser = async () => {  
-    const userList = [];
-    const querySnapshot = await getDocs(collection(db, "user"));
-    querySnapshot.forEach((doc) => {
-        const user = {
-            docID: doc.id,
-            UID: doc.get("UID"),
-            email: doc.get("email")
-        }
-        userList.push(user);
-    }); 
-    let currentUser;
-    for(let i = 0; i< userList.length; i++){
-      if (userList[i].UID === state.user.id){
-        currentUser = userList[i];
-      }
-    }
-    if(currentUser){
-      if(currentUser.email === state.user.email){
-        admin = true;
-      }else{
-        dispatch({type:'SET_USER',payload:{}});
-        admin = false;
-      }
-    }else if(!currentUser){
-      for(let i = 0; i< userList.length; i++){
-        if (userList[i].email === state.user.email){
-          currentUser = userList[i];
-        }
-      }
-      if(currentUser && currentUser.UID === "null"){
-        await updateDoc(doc(db, "user", currentUser.docID), { UID: state.user.id });
-        admin = true;
-      }else{
-        dispatch({type:'SET_USER',payload:{}});
-        admin = false;
-      }
-    }
-    if(admin === false){
-      deleteUser(currentUserInfo).then(() => {
-        // User deleted.
-      }).catch((error) => {
-        // An error ocurred
-        // ...
-      });
-      navigate("/");
-    }
-    else{
-      navigate("/admin")
-    }
-    }
-    checkUser();
 
-    return (
-      <div>
-        <h1>Verifying your login</h1>
-      </div>
-    );
-};
+async function LoginVerify(userData){
+  let admin = false;
+  const q = query(collection(db, "user"), where("UID", "==", currentUserInfo.uid));
+  const querySnapshot = await getDocs(q);
+  console.log(querySnapshot);
+  return admin;
+}
  
 export default LoginVerify;
