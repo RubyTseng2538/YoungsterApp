@@ -10,11 +10,10 @@ import { UserContext } from './userContext';
 
 export default function Footer(){
   let navigate = useNavigate();
-  const {state, dispatch} = React.useContext(UserContext);
-  console.log(state.user.id);
+  const {state} = React.useContext(UserContext);
   const direct = () => {
     if(state.user.id){
-      navigate("/LoginVerify");
+      navigate("/admin");
     }else{
       navigate("/login");
     }

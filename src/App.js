@@ -19,22 +19,23 @@ import { UserContext, UserProvider } from './userContext';
 import { useNavigate } from "react-router-dom";
 
 const FycdRoutes = () => {
-  const {dispatch} = React.useContext(UserContext);
+  const {state, dispatch} = React.useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async(user) => {
       setLoading(true);
+      let admin;
       if (user) {
         const loginUser = {
           id: user.uid,
           name: user.displayName,
           email: user.email
         }
-        let admin = LoginVerify(loginUser);
-        if(admin == true){
-          dispatch({type:'SET_USER',payload:loginUser});
+        admin = await LoginVerify(loginUser);
+        if(admin === true){
+          dispatch({type:'SET_USER', payload:loginUser});  
         }else{
           dispatch({type:'SET_USER',payload:{}});
         }
@@ -45,6 +46,18 @@ const FycdRoutes = () => {
     });
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  if(loading === true){
+    return(
+      <div>Loading</div>
+    )
+  }else{
+    if(state.user.id){
+      navigate("/admin");
+    }else{
+      navigate("/");
+    }
+  }
+  
   return (
     <Routes>
           <Route path="/" element={<Navigation />}></Route>

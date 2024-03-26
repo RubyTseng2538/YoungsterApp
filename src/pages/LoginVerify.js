@@ -1,9 +1,5 @@
-import React, { useState } from 'react';
-import {useNavigate } from "react-router-dom";
-import { UserContext } from '../userContext';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, updateDoc, doc} from "firebase/firestore";
-import { getAuth, deleteUser, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, getDocs, updateDoc, doc, query, where} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDwCZ_ulcO61Ic0aQlNjnhR8oR9jaVzxTk",
@@ -18,20 +14,39 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth();
-let currentUserInfo = auth.currentUser;
-onAuthStateChanged(auth, (user)=>{
-  if(user){
-    currentUserInfo = user;
-  }
-});
 
 
 async function LoginVerify(userData){
+  let userID;
+  let userEmail;
+  let docID;
   let admin = false;
-  const q = query(collection(db, "user"), where("UID", "==", currentUserInfo.uid));
-  const querySnapshot = await getDocs(q);
-  console.log(querySnapshot);
+  let q = query(collection(db, "user"), where("UID", "==", userData.id));
+  let querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    userID = doc.get("UID");
+    userEmail = doc.get("email");
+    docID = doc.id;
+  });
+  if(userID){
+    admin = true;
+    return admin;
+  }else{
+    q = query(collection(db, "user"), where("email", "==", userData.email));
+    querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      userID = doc.get("UID");
+      userEmail = doc.get("email");
+      docID = doc.id;
+    });
+      if(userEmail){
+      await updateDoc(doc(db, "user", docID), { UID: userData.id });
+      admin = true;
+      return admin;
+    }
+  }
   return admin;
 }
  
