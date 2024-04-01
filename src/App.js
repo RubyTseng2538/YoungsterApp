@@ -40,6 +40,7 @@ const FycdRoutes = () => {
             }).catch((error) => {
             // An error happened.
             });
+            alert('Invalid Admin Account');
         }else{
           dispatch({type:'SET_USER',payload:loginUser});
           navigate("/admin");
@@ -47,6 +48,7 @@ const FycdRoutes = () => {
       } else {
         dispatch({type:'SET_USER',payload:{}});
         navigate("/login");
+        
       }
     });
 // eslint-disable-next-line react-hooks/exhaustive-deps

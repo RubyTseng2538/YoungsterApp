@@ -1,5 +1,5 @@
 import React from 'react'
-import { List } from 'antd-mobile'
+import { List} from 'antd-mobile'
 import {
     FileOutline,
     // SoundOutline,
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 export default function Navigation(){
   let navigate = useNavigate();
     return (
+      <div>
         <List header='Materials'>
         <List.Item prefix={<FileOutline />} onClick={() => {navigate('/documents')}}>
           Documents
@@ -21,5 +22,6 @@ export default function Navigation(){
           Videos
         </List.Item>
         </List>
+      </div>
     );
 }
