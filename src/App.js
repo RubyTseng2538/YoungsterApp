@@ -14,51 +14,50 @@ import VideoDisplay from './pages/VideoDisplay.js';
 import AudioDisplay from './pages/audioDisplay.js';
 import LoginVerify from './pages/LoginVerify.js';
 import { HashRouter, Routes, Route } from "react-router-dom";
-import {onAuthStateChanged,getAuth} from 'firebase/auth';
+import {onAuthStateChanged,getAuth, signOut} from 'firebase/auth';
 import { UserContext, UserProvider } from './userContext';
 import { useNavigate } from "react-router-dom";
 
 const FycdRoutes = () => {
   const {dispatch} = React.useContext(UserContext);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const auth = getAuth();
-    onAuthStateChanged(auth, async(user) => {
-      setLoading(true);
-      let admin;
+    onAuthStateChanged(auth, async (user) => {
+      setLoading(false);
       if (user) {
         const loginUser = {
           id: user.uid,
           name: user.displayName,
           email: user.email
         }
-        admin = await LoginVerify(loginUser);
-        if(admin === true){
-          dispatch({type:'SET_USER', payload:loginUser}); 
-          setLoading(false); 
-          navigate("/admin");
-
+        let admin = await LoginVerify(loginUser);
+        if(!admin){
+            const auth = getAuth();
+            signOut(auth).then(() => {
+            // Sign-out successful.
+            }).catch((error) => {
+            // An error happened.
+            });
         }else{
-          dispatch({type:'SET_USER',payload:{}});
-          setLoading(false);
-          navigate("/");
-        }
+          dispatch({type:'SET_USER',payload:loginUser});
+          navigate("/admin");
+        }    
       } else {
-          dispatch({type:'SET_USER',payload:{}});
-          setLoading(false);
-          navigate("/");
+        dispatch({type:'SET_USER',payload:{}});
+        navigate("/login");
       }
-      
     });
-
-    if(loading === true){
-      return(
-        <div>Loading</div>
-      )
-    }
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  if(loading){
+    return(
+        <div>
+            Loading
+        </div>
+    )
+}
   
   
   return (
