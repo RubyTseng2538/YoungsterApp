@@ -47,7 +47,7 @@ const FycdRoutes = () => {
         }    
       } else {
         dispatch({type:'SET_USER',payload:{}});
-        navigate("/login");
+        navigate("/");
         
       }
     });
