@@ -12,13 +12,13 @@ export default function Navigation(){
     return (
       <div>
         <List header='Materials'>
-        <List.Item prefix={<FileOutline />} onClick={() => {navigate('/documents')}}>
+        <List.Item prefix={<FileOutline />} onClick={() => {navigate('/documents')}} data-testid="documents">
           Documents
         </List.Item>
         {/* <List.Item prefix={<SoundOutline />} onClick={() => {navigate('/audio')}}>
           Audios
         </List.Item> */}
-        <List.Item prefix={<VideoOutline />} onClick={() => {navigate('/video')}}>
+        <List.Item prefix={<VideoOutline />} onClick={() => {navigate('/video')}} data-testid="video">
           Videos
         </List.Item>
         </List>

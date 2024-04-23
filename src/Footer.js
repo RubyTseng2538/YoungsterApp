@@ -26,9 +26,9 @@ export default function Footer(){
             }else {
               navigate('/', { replace: true });
             }}
-          }><LeftOutline fontSize={24} style={{marginRight: '30%'}}/></button>
-          <Link to="/" style={{ color: 'black', textDecoration: 'none' }}><FolderOutline /></Link>
-          <UserCircleOutline style={{marginLeft: '30%'}} onClick={direct}/>
+          }><LeftOutline fontSize={24} style={{marginRight: '30%'}} data-testid="back"/></button>
+          <Link to="/" style={{ color: 'black', textDecoration: 'none' }} data-testid="home"><FolderOutline /></Link>
+          <UserCircleOutline style={{marginLeft: '30%'}} onClick={direct} data-testid="signIn"/>
         </footer>
     );
 }
